@@ -1,4 +1,5 @@
 import datetime
+import sys
 
 result = []
 
@@ -20,7 +21,11 @@ with open('profile_result.txt', 'r') as file:
 result.sort(key=lambda x: x['resistence'], reverse=True)
 
 linear_values = []
-max_val = 250_000
+if len(sys.argv) < 2:
+	print("Usage: python generate_lookup.py <max_resistence>")
+	sys.exit(1)
+
+max_val = int(sys.argv[1])
 include_inverse = False
 
 for step in range(0, 255):
