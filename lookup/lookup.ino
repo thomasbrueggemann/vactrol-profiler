@@ -5,6 +5,7 @@
 #define DIGIPOT_CS 22
 #define PWM_PIN 7
 #define VOLT_READ A0
+#define DIGIPOT_IDX 1
 
 float Vin = 5; // input voltage
 float Vout = 0;
@@ -26,7 +27,6 @@ void setup()
 {
 	pinMode(VOLT_READ, INPUT);
 	pinMode(PWM_PIN, OUTPUT);
-	pinMode(DIGIPOT_CS, OUTPUT);
 
 	Serial.begin(9600);
 	SPI.begin();
@@ -34,7 +34,7 @@ void setup()
 
 	// warmup
 	analogWrite(PWM_PIN, 1);
-	digipot.setValue(0, 0);
+  digipot.setValue(DIGIPOT_IDX, 0);
 
 	delay(2000);
 }
@@ -46,9 +46,9 @@ void loop()
 		for (digipotStep = 0; digipotStep < 256; digipotStep++)
 		{
 			analogWrite(PWM_PIN, pwmStep);
-			digipot.setValue(0, digipotStep);
+			digipot.setValue(DIGIPOT_IDX, digipotStep);
 
-			delay(250);
+			delay(125);
 
 			voltValue = analogRead(VOLT_READ);
 			buff = (Vin * voltValue);
