@@ -1,0 +1,7 @@
+vol  a - 3
+bass a - 22
+bass b - 27
+mid  a - 23
+mid  b - 24
+treb a - 10
+treb b - 26

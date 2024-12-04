@@ -1,8 +1,8 @@
 import datetime
 import sys
 
-if len(sys.argv) < 3:
-	print("Usage: python generate_lookup.py <input_file_path> <max_resistence>")
+if len(sys.argv) < 4:
+	print("Usage: python generate_lookup.py <input_file_path> <max_resistence> <output_folder>")
 	sys.exit(1)
 
 result = []
@@ -51,7 +51,7 @@ for step, entry in enumerate(linear_values):
 	if last_i is not None and i == last_i:
 		continue
 
-	print(entry['main']['resistence'])
+	#print(entry['main']['resistence'])
 
 	if include_inverse:
 		cpp_code += f"    {{ {i}, {inverse_i} }},\n"
@@ -69,5 +69,5 @@ cpp_code += "};\n\n#endif // LOOKUP_HPP\n"
 
 final_cpp_code = header_cpp_code + cpp_code
 
-with open(f'lookup_{max_val}.hpp', 'w') as cpp_file:
+with open(f'{sys.argv[3]}/lookup_{max_val}.hpp', 'w') as cpp_file:
 	cpp_file.write(final_cpp_code)
