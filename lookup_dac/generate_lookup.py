@@ -1,5 +1,6 @@
 import datetime
 import sys
+import math
 
 if len(sys.argv) < 4:
 	print("Usage: python generate_lookup.py <input_file_path> <max_resistence> <output_folder>")
@@ -27,10 +28,19 @@ linear_values = []
 
 max_val = int(sys.argv[2])
 include_inverse = False
+max_steps = 1023
+mode = "lin"
 
-for step in range(0, 255):
-	desired = max_val / 256 * step
+for step in range(0, max_steps):
+	if mode == 'log':
+		desired = max_val * (math.log(step + 1) / math.log(max_steps + 1))
+	elif mode == 'exp':
+		desired = max_val * ((step / max_steps) ** 2)
+	else:
+		desired = max_val / max_steps * step
+
 	closest_entry = min(result, key=lambda x: abs(x['resistence'] - desired))
+	print(closest_entry["voltage"])
 
 	desired_inverse = max_val - desired
 	closest_entry_inverse = min(result, key=lambda x: abs(x['resistence'] - desired_inverse))
@@ -48,7 +58,7 @@ for step, entry in enumerate(linear_values):
 	i = entry['main']['voltage']
 	inverse_i = entry['inverse']['voltage']
 
-	if last_i is not None and i == last_i:
+	if last_i is not None and i == last_i and mode == 'lin':
 		continue
 
 	#print(entry['main']['resistence'])
@@ -56,13 +66,13 @@ for step, entry in enumerate(linear_values):
 	if include_inverse:
 		cpp_code += f"    {{ {i}, {inverse_i} }},\n"
 	else:
-		cpp_code += f"    {{ {i} }},\n"
+		cpp_code += f"     {i},\n"
 
 	last_i = i
 	unq_values += 1
 
 
-header_cpp_code = f"#ifndef LOOKUP_HPP\n#define LOOKUP_HPP\n\nint lookup[{unq_values}][{int(include_inverse) + 1}] = "
+header_cpp_code = f"#ifndef LOOKUP_HPP\n#define LOOKUP_HPP\n\nint lookup[{unq_values}] = "
 header_cpp_code += "{\n"
 
 cpp_code += "};\n\n#endif // LOOKUP_HPP\n"

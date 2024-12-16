@@ -1,7 +1,7 @@
-vol  a - 3
-bass a - 22
-bass b - 27
-mid  a - 23
-mid  b - 24
-treb a - 10
-treb b - 26
+vol  a -  3 - U10
+bass a - 22 -  U3 - 100k
+bass b - 27 -  U5 - 100k
+mid  a - 23 -  U7 - 100k
+mid  b - 24 -  U9 - 100k
+treb a - 10 - U12 - 250k
+treb b - 26 - U14 - 250k
